@@ -20,7 +20,7 @@
     ********************************************************************************   
     void push (const T &item)
     Requires: Nothing.
-    Effects:  Saves a pointer to the passed value in the stack following the first-in first-out rule.
+    Effects:  Saves a pointer to the passed value in the stack following the last-in first-out rule.
 
     Testing Strategy:  1) Passing NULL.
                        2) Executing the function an even number of times.
