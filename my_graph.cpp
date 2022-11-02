@@ -1,3 +1,42 @@
+/*
+   Graph(const vector<int> &start, const vector<int> &end)
+
+   Requires: 2 vectors of equal sizes of type int.
+   Effects: It maps every element in vector start at index i to end[i]. It builds the road start[i] -> end[i].
+            An element in start vector may be mapping to more than one element in vector end.
+
+   Testing Strategy: 1) Passing two empty vectors
+                     2) Passing two vectors such that each element in start maps to one element in end.
+                     3) Passing two vectors such that all all elements in start are equal, in other meaning only one starting point
+                        and many destinations.
+                     4) Passing two vectors such two or more starting points map to the same single or multiple destinations.
+                     5) Passing two vectors such that all starting points map to one end point.
+
+   ***********************************************************************************************************
+
+   int numOutgoing(const int nodeID)
+
+   Requires: Nothing
+   Effects: Returns the number of destinations a node is mapping to.
+
+   Testing Strategy: 1) nodeID was not initially present in the start vector.
+                     2) Node maps to 0 destinations
+                     3) Node maps to odd size of destinations
+                     4) Node maps to even size of destinations
+
+   ***********************************************************************************************************
+   const vector<int> & adjacent(const int nodeID)
+   
+   Requires: Nothing
+   Effects: Returns a reference to a vector containing the destinations of a given id to some starting point.
+
+   Testing Strategy: 1) nodeID was not initially present in the start vector.
+                     2) Node maps to 0 destinations
+                     3) Node maps to odd size of destinations
+                     4) Node maps to even size of destinations
+
+*/
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -23,9 +62,9 @@ class Graph
                
                for (int j=0;j<start.size();j++)
                {
-                  if(start[j]==i)
+                  if(start[j]==start[i])
                   {
-                     destinations.push_back(j);
+                     destinations.push_back(end.at(j));
                   }
                }
                Edges.insert({i,destinations});
@@ -68,8 +107,11 @@ int main()
    std :: vector <int> ends = {1,2,3,3,1,1};
 
    Graph my_graph (starts, ends);
-   //cout << my_graph.numOutgoing(9);
+   cout << "The number of edges with node 0 as starting point: ";
+   cout << my_graph.numOutgoing(0) <<endl;
 
    vector <int> testing = my_graph.adjacent(0);
-   cout<< testing.size();
+   cout<< "Node 0 maps to: ";
+   for(int i=0; i<testing.size();i++)
+      cout<< testing.at(i) << " ";
 }
