@@ -95,6 +95,7 @@
 
 */
 #include <iostream>
+#include<queue>
 using namespace std;
 
 template <typename T>
@@ -108,8 +109,6 @@ struct treeNode * right;
 template <typename T>
 struct treeNode<T>* createNode (T data)
 {
-    if(data == NULL)
-        return NULL;
     treeNode <T>* node = new struct treeNode<T>;
     T *ptrData = new T;
     *ptrData = data; 
@@ -126,39 +125,37 @@ struct btree {
     private:
 
      //If type T is a char, values are compared according to their ASCII values.
-     treeNode<T>* addNode(treeNode<T>* root, treeNode<T>*node)
-    {
-        if(root==NULL)
-        {
-            root = node;
-            return root;
-        }
-        else if (*(root->data)>=*(node->data))
-        {
-            root->left = addNode(root->left,node);
-        }
-        else
-        {
-            root->right = addNode(root->right,node);
-        }
+   treeNode<T>* addNode(treeNode<T>* root, treeNode<T>*node)
+{
+    if (root == NULL) {
+        root = node;
         return root;
     }
-
-     treeNode<T>* search_Helper(treeNode<T> * root, T value)
+    queue<treeNode<T>*> queue ;
+    queue.push(root);
+ 
+    while (!queue.empty()) 
     {
-        if(root == NULL)
-            return NULL;
-
-        else if((*(root ->data) == value))
+        treeNode<T>* temp = queue.front();
+        queue.pop();
+ 
+        if (temp->left != NULL)
+            queue.push(temp->left);
+        else 
+        {
+            temp->left = node;
             return root;
-
-            else if(value > *(root -> data))
-                return search_Helper(root ->right,value);
-
-                else if(value < *(root ->data))
-                    return search_Helper(root->left,value); 
-
+        }
+ 
+        if (temp->right != NULL)
+            queue.push(temp->right);
+        else 
+        {
+            temp->right = node;
+            return root;
+        }
     }
+}
 
      int treeSize_Helper(treeNode<T>* root)
     {
@@ -202,6 +199,21 @@ struct btree {
               inOrder(root->right);   
     }
 
+    treeNode<T>* deleteNode_helper(treeNode<T>* node, T value)
+    {
+        if(node==NULL)
+          return NULL;
+        node->left = deleteNode_helper(node->left,value);
+        node->right = deleteNode_helper(node->right,value);  
+
+        if(*(node->data) == value && node->left == NULL && node->right == NULL)
+            return NULL;
+
+        return node;
+    }
+
+
+
     public:
     void addNode(treeNode<T>* node)
     {
@@ -213,21 +225,9 @@ struct btree {
             root =addNode(root,node);
     }
    
-    treeNode<T>* search(T value)
+    treeNode<T>* deleteNode (T value)
     {
-        return search_Helper(root,value);
-    }
-
-    void deleteNode (T value)
-    {
-        treeNode<T>* node = search(value);
-        if((node ==NULL) || (node->left != NULL) || (node->right != NULL))
-            cout << "CANNOT DELETE THIS NODE" << endl;
-
-        else
-        {
-            delete(node);
-        }
+        return deleteNode_helper(root,value);
     }
 
     int treeSize()
@@ -235,11 +235,9 @@ struct btree {
         return treeSize_Helper(root);
     }
 
-    int subtree(T value)
+    int subtree_Size(treeNode<T>* node)
     {
-        treeNode<T>* node = search(value);
-        char size =  treeSize_Helper(node);
-        return size;
+        return treeSize_Helper(node);
     }
 
     void postorder_Traversal()
@@ -285,7 +283,7 @@ int main()
 
     cout << "The size of the tree is :" << tree -> treeSize() << endl;
 
-    cout << "The size of the tree rooted at node of value 7 is: " << tree ->subtree(7) << endl;
+    cout << "The size of the tree (including the root) rooted at the node you passed: " << tree ->subtree_Size(node2) << endl;
 
     tree -> inorder_Traversal();
     cout << endl;
@@ -296,9 +294,9 @@ int main()
     tree -> preorder_Traversal();
     cout << endl;
 
-    tree -> deleteNode(9);
-    cout << "After performig the delete function, the in-order traversal becomes:" << endl;
-    tree -> inorder_Traversal();
+    tree -> deleteNode(3);
+    cout << "After performig the delete function for value 3, the in-order traversal becomes:" << endl;
+    tree ->inorder_Traversal();
     cout << endl;
 
     //Testing when the elements' type is char.
