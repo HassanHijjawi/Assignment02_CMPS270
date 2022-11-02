@@ -3,15 +3,16 @@
 #include <map>
 using namespace std;
 
-template <typename T>
 class Graph 
 {
     private :
     std :: map<int, vector<int>> Edges;
 
     public :
-     Graph::Graph(const vector<int> &start, const vector<int> &end)
+      Graph(const vector<int> &start, const vector<int> &end)
      {
+        if(start.size()!=end.size())
+            throw invalid_argument("Different Vector sizes.\n");
         int i=0;
         std :: vector <int> destinations;
 
@@ -22,12 +23,12 @@ class Graph
                
                for (int j=0;j<start.size();j++)
                {
-                  if(j==i)
+                  if(start[j]==i)
                   {
                      destinations.push_back(j);
                   }
                }
-               Edges.insert(i,destinations);
+               Edges.insert({i,destinations});
                destinations.clear();
             }
         }
@@ -35,13 +36,40 @@ class Graph
 
      int numOutgoing(const int nodeID)
      {
-         std :: vector<int> copy = Edges.at(nodeID);
-         return copy.size();
+         if(Edges.count(nodeID)>0)
+         {
+            vector<int> copy = Edges.at(nodeID);
+            return copy.size();
+         }
+         cout<< "Invalid Vertix"<<endl ;
+         return 0;
+         
      }
 
      const vector<int> & adjacent(const int nodeID)
      {
-         std :: vector <int> & copy = Edges.at(nodeID);
-         return copy;
+         if(Edges.count(nodeID)>0)
+         {
+            std :: vector <int> & copy = Edges.at(nodeID);
+            return copy;
+         }
+          
+          else{
+               cout << "Invalid Vertex";
+
+          }
+          
      }
+};
+
+int main()
+{
+   std :: vector <int> starts = {0,0,0,4,4,3};
+   std :: vector <int> ends = {1,2,3,3,1,1};
+
+   Graph my_graph (starts, ends);
+   //cout << my_graph.numOutgoing(9);
+
+   vector <int> testing = my_graph.adjacent(0);
+   cout<< testing.size();
 }
