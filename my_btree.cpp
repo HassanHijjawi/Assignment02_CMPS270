@@ -40,24 +40,24 @@
      !!!  treeNode<T>* addNode(treeNode<T>* root, treeNode<T>*node)
     
     requires: The type T must be an int or char.
-    effects: On the first call, it creates the root. Later passed node in other calls will be correctly positioned in the BST.
+    effects: On the first call, it creates the root. Later passed node in other calls will be correctly positioned in the Binary tree.
 
     TestCases:
     addNode (NULL) --> Root is still null.
 
     Sequence of operations if T is int:
     addNode (5) --> Root is 5.
-    addNode (6)  --> Node is right child of 5.
-    addNode (7) --> Node is right child of 6.
-    addNode (4) --> Node is left child of 5.
-    addNode(3) --> Node is left child of 4.
+    addNode (6)  --> Node is left child of 5.
+    addNode (7) --> Node is right child of 5.
+    addNode (4) --> Node is left child of 6.
+    addNode(3) --> Node is right child of 6.
 
     Sequence of operations if T is char:
     addNode ('b') --> Root is 'b'.
-    addNode ('c')  --> Node is right child of 'b'.
-    addNode ('d') --> Node is right child of 'c'.
-    addNode ('a') --> Node is left child of 'b'.
-    addNode('Z') --> Node is left child of 'a'.
+    addNode ('c')  --> Node is left child of 'b'.
+    addNode ('d') --> Node is right child of 'b'.
+    addNode ('a') --> Node is left child of 'c'.
+    addNode('Z') --> Node is right child of 'c'.
 
     *****************************************************************************************************************************************
 
@@ -75,10 +75,10 @@
 
     *****************************************************************************************************************************************
 
-    int subtree(T value)
+    int subtree(treeNode<T>* node)
 
     Very similar to the treeSize_Helper function.
-    It treats the tree rooted at the node whose data is equal to the passed value as a seperate tree and returns its sub-children.
+    It treats the tree rooted at the node whose data is equal to the passed value as a seperate tree and returns its size.
 
     ****************************************************************************************************************************************
 
@@ -91,6 +91,16 @@
 
      If the root is empty, nothing gets printed.
 
+    ***************************************************************************************************************************************
+    treeNode<T>* deleteNode_helper(treeNode<T>* node, T value)
+
+    Requires: The root and a value T.
+    Effects: Only deletes the node whose data = passed value if it was a leaf node.
+
+    Testing strategy: 1) Passing a value that is not in the tree
+                      2) Passing a value of a node that is not a leaf
+                      3) Passing a value of a node that is a leaf
+    
     ***************************************************************************************************************************************
 
 */
